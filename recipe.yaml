@@ -1,0 +1,51 @@
+context:
+  version: "15.2.rel1"
+  url_root: "https://developer.arm.com/-/media/Files/downloads/gnu/${{ version }}/binrel/"
+  url_win: "${{ url_root }}/arm-gnu-toolchain-${{ version }}-mingw-w64-i686-arm-none-eabi.zip"
+  url_linux: "${{ url_root }}/arm-gnu-toolchain-${{ version }}-x86_64-arm-none-eabi.tar.xz"
+  url_osx: "${{ url_root }}/arm-gnu-toolchain-${{ version }}-darwin-arm64-arm-none-eabi.tar.xz"
+
+package:
+  name: arm-gnu-toolchain
+  version: ${{ version }}
+
+build:
+  dynamic_linking:
+    binary_relocation: false
+  script:
+    # Windows
+    - if: win
+      then:
+        - curl -L -o "toolchain.zip" "${{ url_win }}"
+        - mkdir toolchain
+        - unzip "toolchain.zip" -d "toolchain"
+        - |
+          # Move all files to $PREFIX
+          mv "toolchain/"* "$PREFIX/"
+    # Linux
+    - if: linux
+      then:
+        - curl -L -o "toolchain.tar.xz" "${{ url_linux }}"
+        - mkdir toolchain
+        - tar -xf "toolchain.tar.xz" -C "toolchain" --strip-components=1
+        - |
+          # Move all files to $PREFIX
+          mv "toolchain/"* "$PREFIX/"
+    # macOS
+    - if: osx
+      then:
+        - curl -L -o "toolchain.tar.xz" "${{ url_osx }}"
+        - mkdir toolchain
+        - tar -xf "toolchain.tar.xz" -C "toolchain" --strip-components=1
+        - |
+          # Move all files to $PREFIX
+          mv "toolchain/"* "$PREFIX/"
+
+#tests:
+#  - script:
+#    - arm-none-eabi-gcc --version
+
+about:
+  homepage: https://developer.arm.com/open-source/gnu-toolchain/gnu-rm
+  license_file: license
+  summary: GNU Arm Embedded Toolchain
