@@ -1,7 +1,7 @@
 [workspace]
 authors = ["Henry Institoris <xtitoris@gmail.com>"]
 channels = ["conda-forge"]
-name = "arm-gcc-toolchain"
+name = "xtitoris-forge"
 platforms = ["linux-64", "win-64", "osx-arm64"]
 version = "0.1.0"
 

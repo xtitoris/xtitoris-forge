@@ -1,0 +1,25 @@
+context:
+  version: "0.21.0"
+
+package:
+  name: hex2dfu
+  version: ${{ version }}
+
+source:
+  git: https://github.com/encedo/hex2dfu
+
+build:
+  script:
+    - if: win
+      then:
+        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu.exe"
+    - if: linux
+      then:
+        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu"
+    - if: osx
+      then:
+        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu"
+
+about:
+  homepage: https://github.com/encedo/hex2dfu
+  summary: Simple command line tool to convert file format from Intel HEX to STM32 DFU.
