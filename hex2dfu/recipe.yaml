@@ -11,14 +11,14 @@ source:
 build:
   script:
     - if: win
-      then:
-        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu.exe"
-    - if: linux
-      then:
-        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu"
-    - if: osx
-      then:
-        "gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu"
+      then: |
+        gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu.exe -static -static-libgcc -static-libstdc++
+        mkdir -p %LIBRARY_BIN%
+        cp hex2dfu.exe %LIBRARY_BIN%/
+      else: |
+        gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu -static
+        mkdir -p $PREFIX/bin
+        cp hex2dfu $PREFIX/bin/
 
 about:
   homepage: https://github.com/encedo/hex2dfu

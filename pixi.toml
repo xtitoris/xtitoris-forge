@@ -9,8 +9,10 @@ version = "0.1.0"
 
 [dependencies]
 rattler-build = ">=0.55.1,<0.56"
+gcc = ">=15.2.0,<15.3"
 
 [target.win-64.dependencies]
+m2-coreutils = "*"
 m2-unzip = "*"
 m2-tar = "*"
 m2-bash = "*"
