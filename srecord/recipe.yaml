@@ -27,8 +27,12 @@ build:
 
 requirements:
   build:
+    - if: win
+      then:
+        - m2-libgcrypt
+      else:
+        - libgcrypt
     - cmake
-    - libgcrypt
     - ${{ compiler("c") }}
 
 about:
