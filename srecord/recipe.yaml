@@ -14,7 +14,7 @@ build:
     - if: win
       then: |
         git apply %RECIPE_DIR%\remove-docs-1.65.patch
-        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=%LIBRARY_BIN% -DCMAKE_C_COMPILER=gcc
+        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=%LIBRARY_BIN% -DCMAKE_C_COMPILER="gcc.exe" -G "MinGW Makefiles"
         cmake --build build --config Release
         cmake --install build --prefix %LIBRARY_BIN% --config Release
       else: |
