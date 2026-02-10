@@ -6,20 +6,22 @@ package:
   version: ${{ version }}
 
 source:
-  git: https://github.com/encedo/hex2dfu
+  git: https://github.com/rusefi/hex2dfu
+  branch: rusefi_prod
+  
 
 build:
   script:
     - if: win
       then: |
-        gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu.exe -static -static-libgcc -static-libstdc++
+        gcc hex2dfu.c -o hex2dfu.exe -static -static-libgcc -static-libstdc++
         mkdir -p %LIBRARY_BIN%
         cp hex2dfu.exe %LIBRARY_BIN%/
       else: |
-        gcc  -DED25519_SUPPORT=0 hex2dfu.c -o hex2dfu -static
+        gcc hex2dfu.c -o hex2dfu -static
         mkdir -p $PREFIX/bin
         cp hex2dfu $PREFIX/bin/
 
 about:
-  homepage: https://github.com/encedo/hex2dfu
+  homepage: https://github.com/rusefi/hex2dfu
   summary: Simple command line tool to convert file format from Intel HEX to STM32 DFU.
