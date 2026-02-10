@@ -1,0 +1,42 @@
+context:
+  version: "1.65"
+
+package:
+  name: srecord
+  version: ${{ version }}
+
+source:
+  git: https://git.code.sf.net/p/srecord/code
+  tag: v1.65
+
+build:
+  script:
+    - if: win
+      then: |
+        git apply %RECIPE_DIR%\remove-docs-1.65.patch
+        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=%PREFIX% -G "MinGW Makefiles" -DCMAKE_CXX_FLAGS="-include cstdint"
+        cmake --build build --config Release
+        cmake --install build --prefix %PREFIX% --config Release
+      else: |
+        git apply $RECIPE_DIR/remove-docs-1.65.patch
+        git apply $RECIPE_DIR/srecord-1.65-fedora.patch
+        cmake -S . -B build -DCMAKE_INSTALL_PREFIX=$PREFIX
+        cmake --build build
+        cmake --install build --prefix $PREFIX
+
+
+requirements:
+  build:
+    - if: win
+      then:
+        - m2-libgcrypt
+        - ${{ compiler("gcc") }}
+        - ${{ compiler("gxx") }}
+      else:
+        - libgcrypt
+        - ${{ compiler("c") }}
+    - cmake
+
+about:
+  homepage: https://srecord.sourceforge.net
+  summary: The SRecord package is a collection of powerful tools for manipulating EPROM load files.

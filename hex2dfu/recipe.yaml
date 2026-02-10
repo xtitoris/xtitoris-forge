@@ -8,7 +8,6 @@ package:
 source:
   git: https://github.com/rusefi/hex2dfu
   branch: rusefi_prod
-  
 
 build:
   script:
@@ -21,6 +20,10 @@ build:
         gcc hex2dfu.c -o hex2dfu
         mkdir -p $PREFIX/bin
         cp hex2dfu $PREFIX/bin/
+
+requirements:
+  build:
+    - gcc
 
 about:
   homepage: https://github.com/rusefi/hex2dfu
