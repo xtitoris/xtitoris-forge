@@ -1,0 +1,59 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea7f41e6..8f902722 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -51,11 +51,11 @@ add_subdirectory(srec_cmp)
+ add_subdirectory(srec_info)
+ 
+ # Tests & support tools
+-enable_testing()
+-add_subdirectory(test)
++# enable_testing()
++# add_subdirectory(test)
+ 
+ # Documentation & Man Pages
+-add_subdirectory(doc)
++# add_subdirectory(doc)
+ 
+ # Package SRecord
+ include(CPack)
+diff --git a/etc/configure.cmake b/etc/configure.cmake
+index 343a70a2..76a0ecf6 100644
+--- a/etc/configure.cmake
++++ b/etc/configure.cmake
+@@ -104,7 +104,7 @@ option(_TANDEM_SOURCE ON)
+ option(__EXTENSIONS__ ON)
+ 
+ # Doxygen configuration
+-find_package(Doxygen REQUIRED doxygen dot)
++# find_package(Doxygen REQUIRED doxygen dot)
+ 
+ set(DOXYGEN_DOT_GRAPH_MAX_NODES 150)
+ set(DOXYGEN_ALPHABETICAL_INDEX NO)
+diff --git a/srecord/CMakeLists.txt b/srecord/CMakeLists.txt
+index 930dbf99..fa35e946 100644
+--- a/srecord/CMakeLists.txt
++++ b/srecord/CMakeLists.txt
+@@ -34,9 +34,9 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+         FILES_MATCHING PATTERN "*.h")
+ 
+ # Install the Doxygen output for the website
+-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
+-        DESTINATION ${CMAKE_INSTALL_DOCDIR}/htdocs/srecord
+- 	COMPONENT website)
++# install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
++#       DESTINATION ${CMAKE_INSTALL_DOCDIR}/htdocs/srecord
++#  	COMPONENT website)
+ 
+ # Generate config.h to suit local environment
+ configure_file(config.h.in config.h @ONLY)
+@@ -44,6 +44,6 @@ configure_file(patchlevel.h.in patchlevel.h @ONLY)
+ include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ 
+ # Generate doxygen content
+-doxygen_add_docs(doxygen
+-                 ${LIB_SRECORD_HDR}
+-		 ALL)
++# doxygen_add_docs(doxygen
++#                ${LIB_SRECORD_HDR}
++#		 ALL)
