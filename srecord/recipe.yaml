@@ -24,6 +24,13 @@ build:
         cmake --build build
         cmake --install build --prefix $PREFIX
 
+
+requirements:
+  build:
+    - cmake
+    - libgcrypt
+    - ${{ compiler("c") }}
+
 about:
   homepage: https://srecord.sourceforge.net
   summary: The SRecord package is a collection of powerful tools for manipulating EPROM load files.
