@@ -18,7 +18,7 @@ build:
         mkdir -p %LIBRARY_BIN%
         cp hex2dfu.exe %LIBRARY_BIN%/
       else: |
-        gcc hex2dfu.c -o hex2dfu -static
+        gcc hex2dfu.c -o hex2dfu
         mkdir -p $PREFIX/bin
         cp hex2dfu $PREFIX/bin/
 
