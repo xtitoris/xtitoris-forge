@@ -1,5 +1,5 @@
 context:
-  version: "15.2.rel1"
+  version: "14.2.Rel1"
   url_root: "https://developer.arm.com/-/media/Files/downloads/gnu/${{ version }}/binrel/"
   url_win: "${{ url_root }}/arm-gnu-toolchain-${{ version }}-mingw-w64-i686-arm-none-eabi.zip"
   url_linux: "${{ url_root }}/arm-gnu-toolchain-${{ version }}-x86_64-arm-none-eabi.tar.xz"
@@ -18,28 +18,19 @@ build:
       then:
         - curl -L -o "toolchain.zip" "${{ url_win }}"
         - mkdir toolchain
-        - unzip "toolchain.zip" -d "toolchain"
-        - |
-          # Move all files to $PREFIX
-          mv "toolchain/"* "$PREFIX/"
+        - unzip "toolchain.zip" -d "%PREFIX%"
     # Linux
     - if: linux
       then:
         - curl -L -o "toolchain.tar.xz" "${{ url_linux }}"
         - mkdir toolchain
-        - tar -xf "toolchain.tar.xz" -C "toolchain" --strip-components=1
-        - |
-          # Move all files to $PREFIX
-          mv "toolchain/"* "$PREFIX/"
+        - tar -xf "toolchain.tar.xz" -C "$PREFIX" --strip-components=1
     # macOS
     - if: osx
       then:
         - curl -L -o "toolchain.tar.xz" "${{ url_osx }}"
         - mkdir toolchain
-        - tar -xf "toolchain.tar.xz" -C "toolchain" --strip-components=1
-        - |
-          # Move all files to $PREFIX
-          mv "toolchain/"* "$PREFIX/"
+        - tar -xf "toolchain.tar.xz" -C "$PREFIX" --strip-components=1
 
 #tests:
 #  - script:
