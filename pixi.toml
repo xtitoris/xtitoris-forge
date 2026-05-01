@@ -8,7 +8,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-rattler-build = ">=0.55.1,<0.56"
+rattler-build = ">=0.63.1,<0.64"
 
 [target.win-64.dependencies]
 m2-coreutils = "*"
