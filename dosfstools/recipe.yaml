@@ -20,7 +20,7 @@ source:
       target_directory: msys2_pkg
 
 build:
-  number: 1
+  number: 3
   script:
     - if: linux
       then: |
@@ -33,8 +33,10 @@ build:
         make install
     - if: osx
       then: |
-        export ACLOCAL_PATH="${BUILD_PREFIX}/share/aclocal:${ACLOCAL_PATH}"
-        autoreconf --force --install --verbose
+        export ACLOCAL_PATH="${BUILD_PREFIX}/share/gettext/m4:${BUILD_PREFIX}/share/aclocal:${ACLOCAL_PATH}"
+        autoreconf --force --install --verbose \
+          -I "${BUILD_PREFIX}/share/gettext/m4" \
+          -I "${BUILD_PREFIX}/share/aclocal"
         ./configure \
           --prefix="${PREFIX}" \
           --sbindir="${PREFIX}/bin" \
