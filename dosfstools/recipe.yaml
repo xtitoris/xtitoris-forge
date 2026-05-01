@@ -20,7 +20,7 @@ source:
       target_directory: msys2_pkg
 
 build:
-  number: 0
+  number: 1
   script:
     - if: linux
       then: |
@@ -57,6 +57,7 @@ requirements:
         - autoconf
         - automake
         - gettext
+        - gettext-tools
         - pkg-config
   run:
   - if: win
