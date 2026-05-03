@@ -1,0 +1,78 @@
+context:
+  version: "4.0.49"
+
+package:
+  name: mtools
+  version: ${{ version }}
+
+source:
+  - if: not win
+    then:
+      url: http://ftp.gnu.org/gnu/mtools/mtools-4.0.49.tar.gz
+      sha256: 10cd1111da87bf2400a380c1639a6cba8bfb937a24f9c51f5f88d393ae5f6f76
+  - if: win
+    then:
+      url: https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-mtools-4.0.49-1-any.pkg.tar.zst
+      sha256: acf1c34cb3dc6a7a4496e01f7b308703fcd09c34373d9286f5d668a95c5aea83
+      target_directory: msys2_pkg
+
+build:
+  number: 0
+  script:
+    - if: linux
+      then: |
+        ./configure \
+          --prefix="${PREFIX}" \
+          --sysconfdir="${PREFIX}/etc"
+        make
+        make install
+    - if: osx
+      then: |
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          export ac_cv_func_stat64=no
+        fi
+        ./configure \
+          --disable-debug \
+          --prefix="${PREFIX}" \
+          --sysconfdir="${PREFIX}/etc" \
+          --without-x \
+          LIBS=-liconv
+        make
+        make install
+    - if: win
+      then: |
+        xcopy /E /I /Y msys2_pkg\mingw64\bin\* "%PREFIX%\bin\"
+
+requirements:
+  build:
+    - if: not win
+      then:
+        - ${{ compiler("c") }}
+        - make
+  host:
+    - if: osx
+      then:
+        - libiconv
+    - if: win
+      then:
+        - m2w64-libiconv
+  run:
+  - if: win
+    then:
+      - m2w64-libiconv
+
+tests:
+  - script:
+    - |
+      mformat --help || true
+      mdir --help || true
+
+about:
+  homepage: https://www.gnu.org/software/mtools
+  summary: A collection of utilities to access MS-DOS disks from GNU and Unix without mounting them.
+  license: GPL-3.0-or-later
+  license_file:
+    - if: not win
+      then: COPYING
+    - if: win
+      then: msys2_pkg/mingw64/share/licenses/mtools/COPYING
