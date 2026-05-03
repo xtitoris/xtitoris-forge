@@ -17,7 +17,7 @@ source:
       target_directory: msys2_pkg
 
 build:
-  number: 0
+  number: 1
   script:
     - if: linux
       then: |
@@ -55,11 +55,11 @@ requirements:
         - libiconv
     - if: win
       then:
-        - m2w64-libiconv
+        - libiconv
   run:
   - if: win
     then:
-      - m2w64-libiconv
+      - libiconv
 
 tests:
   - script:
