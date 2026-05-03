@@ -20,7 +20,7 @@ source:
       target_directory: msys2_pkg
 
 build:
-  number: 4
+  number: 5
   script:
     - if: linux
       then: |
@@ -61,12 +61,16 @@ requirements:
         - gettext
         - gettext-tools
         - pkg-config
+  host:
+    - if: win
+      then:
+        - m2-msys2-runtime
+        - m2-libiconv
   run:
   - if: win
     then:
       - m2-msys2-runtime
       - m2-libiconv
-      - m2-conda-epoch ==20250515 *_x86_64
 
 tests:
   - script:
