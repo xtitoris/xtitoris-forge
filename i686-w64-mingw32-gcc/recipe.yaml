@@ -1,0 +1,87 @@
+context:
+  gcc_version: "15.2.0"
+  binutils_version: "2.46.0"
+  # mingw-w64 headers/crt/winpthreads are versioned together
+  mingw_version: "14.0.0.r1.gbd663f0e1"
+
+package:
+  name: i686-w64-mingw32-gcc
+  version: ${{ gcc_version }}
+
+# Windows-only: repackage from MSYS2 msys/x86_64 cross-compiler packages.
+# The resulting conda package provides i686-w64-mingw32-gcc and friends
+# in Library/usr/bin/, co-located with msys-2.0.dll from m2-msys2-runtime.
+
+source:
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-gcc-${{ gcc_version }}-1-x86_64.pkg.tar.zst
+    sha256: 3c0bf56c6ff0f0ffabf2daaf2dd4337ce506464906c28fb79b3d4443bd1b0b70
+    target_directory: msys2_gcc
+
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-binutils-${{ binutils_version }}-1-x86_64.pkg.tar.zst
+    sha256: 67937cc5d8f498e3746c021dd8d6b3c29700499e0b06d01fff514691d2fd160a
+    target_directory: msys2_binutils
+
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-crt-${{ mingw_version }}-1-x86_64.pkg.tar.zst
+    sha256: 21417adaeaa5f259466395dcb931c74fc49289a82978116a7859ff3ee5741f37
+    target_directory: msys2_crt
+
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-headers-${{ mingw_version }}-1-x86_64.pkg.tar.zst
+    sha256: 5f517286aa5c12a2613a6e8f1e225585d770914486e4116a40069ce106e82527
+    target_directory: msys2_headers
+
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-winpthreads-${{ mingw_version }}-1-x86_64.pkg.tar.zst
+    sha256: f15ed0f447eee9ed78a279c4d93960307bc7ae1579b4eb3643ba87e45d9c11a8
+    target_directory: msys2_winpthreads
+
+  # GCC license files (not bundled inside the MSYS2 packages)
+  - url: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=COPYING;hb=refs/tags/releases/gcc-${{ gcc_version }}
+    sha256: 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c
+    file_name: COPYING
+  - url: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=COPYING.RUNTIME;hb=refs/tags/releases/gcc-${{ gcc_version }}
+    sha256: 9d6b43ce4d8de0c878bf16b54d8e7a10d9bd42b75178153e3af6a815bdc90f74
+    file_name: COPYING.RUNTIME
+
+build:
+  number: 0
+  skip:
+    - not win
+  # Pre-built binaries; skip conda's binary relocation (would corrupt MSYS2 ELFs/PEs)
+  dynamic_linking:
+    binary_relocation: false
+  script: |
+    rem Map MSYS2 /opt/ prefix to Library\usr\ so executables land in Library\usr\bin\
+    rem alongside msys-2.0.dll (from m2-msys2-runtime), satisfying the DLL search.
+    rem GCC is built with --enable-relocatable so it derives its prefix from the
+    rem executable location; the relative layout (bin/, lib/gcc/, i686-w64-mingw32/)
+    rem is preserved, just rooted at Library\usr\ instead of /opt/.
+    xcopy /E /I /Y /H msys2_gcc\opt\* "%PREFIX%\Library\usr\"
+    xcopy /E /I /Y /H msys2_binutils\opt\* "%PREFIX%\Library\usr\"
+    xcopy /E /I /Y /H msys2_crt\opt\* "%PREFIX%\Library\usr\"
+    xcopy /E /I /Y /H msys2_headers\opt\* "%PREFIX%\Library\usr\"
+    xcopy /E /I /Y /H msys2_winpthreads\opt\* "%PREFIX%\Library\usr\"
+
+requirements:
+  run:
+    - m2-msys2-runtime
+    - m2-zlib
+    - m2-zstd
+    - m2-gettext
+    - m2-gcc-libs
+
+tests:
+  - script:
+    - i686-w64-mingw32-gcc --version
+    - i686-w64-mingw32-ld --version
+
+about:
+  homepage: https://gcc.gnu.org
+  summary: GCC cross-compiler targeting i686-w64-mingw32, repackaged from MSYS2.
+  description: |
+    Provides a GCC cross-compiler that runs on a 64-bit Windows (mingw64) host
+    and produces 32-bit Windows (i686-w64-mingw32) binaries. Includes GCC,
+    binutils (ld, as, objcopy, …), the mingw-w64 CRT, headers, and winpthreads.
+    Repackaged from the MSYS2 msys/x86_64 cross-compiler packages.
+  license: GPL-3.0-or-later AND LGPL-2.1-or-later
+  license_file:
+    - COPYING
+    - COPYING.RUNTIME
