@@ -1,8 +1,11 @@
 context:
-  gcc_version: "15.2.0"
+  gcc_version: "14.2.0"
+  gcc_version_file: "14.2.0-3"
+
   binutils_version: "2.46.0"
   # mingw-w64 headers/crt/winpthreads are versioned together
   mingw_version: "14.0.0.r1.gbd663f0e1"
+
 
 package:
   name: i686-w64-mingw32-gcc
@@ -13,8 +16,8 @@ package:
 # in Library/usr/bin/, co-located with msys-2.0.dll from m2-msys2-runtime.
 
 source:
-  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-gcc-${{ gcc_version }}-1-x86_64.pkg.tar.zst
-    sha256: 3c0bf56c6ff0f0ffabf2daaf2dd4337ce506464906c28fb79b3d4443bd1b0b70
+  - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-gcc-${{ gcc_version_file }}-x86_64.pkg.tar.zst
+    sha256: f46434a64736733243be3342923d80275a32bed8fd4f5b205a228e4736277975
     target_directory: msys2_gcc
 
   - url: https://repo.msys2.org/msys/x86_64/mingw-w64-cross-mingw32-binutils-${{ binutils_version }}-1-x86_64.pkg.tar.zst
