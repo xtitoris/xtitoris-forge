@@ -5,6 +5,7 @@ context:
   binutils_version: "2.46.0"
   # mingw-w64 headers/crt/winpthreads are versioned together
   mingw_version: "14.0.0.r1.gbd663f0e1"
+  mcp_version: "1.4.1-1"
 
 
 package:
@@ -36,6 +37,10 @@ source:
     sha256: f15ed0f447eee9ed78a279c4d93960307bc7ae1579b4eb3643ba87e45d9c11a8
     target_directory: msys2_winpthreads
 
+  - url: https://repo.msys2.org/msys/x86_64/mpc-${{ mcp_version }}-x86_64.pkg.tar.zst
+    sha256: 0f5073ec2e8be265854ee3c7cb1079b5e8e02264d53e659d8414988c6c182f16
+    target_directory: mcp
+
   # GCC license files (not bundled inside the MSYS2 packages)
   - url: https://gcc.gnu.org/git/?p=gcc.git;a=blob_plain;f=COPYING;hb=refs/tags/releases/gcc-${{ gcc_version }}
     sha256: 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c
@@ -45,7 +50,7 @@ source:
     file_name: COPYING.RUNTIME
 
 build:
-  number: 0
+  number: 1
   skip:
     - not win
   # Pre-built binaries; skip conda's binary relocation (would corrupt MSYS2 ELFs/PEs)
@@ -62,6 +67,7 @@ build:
     xcopy /E /I /Y /H msys2_crt\opt\* "%PREFIX%\Library\usr\"
     xcopy /E /I /Y /H msys2_headers\opt\* "%PREFIX%\Library\usr\"
     xcopy /E /I /Y /H msys2_winpthreads\opt\* "%PREFIX%\Library\usr\"
+    xcopy /E /I /Y /H mcp\usr\* "%PREFIX%\Library\usr\"
 
 requirements:
   run:
